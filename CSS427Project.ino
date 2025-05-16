@@ -31,20 +31,22 @@ unsigned long now, lastPulseSteer, lastPulseMotion;
 void setSums(){
   sumX = r - l;
   sumY = f - b;
-  // if(abs(sumX) < DEADZONE){
-  //   sumX = 0;
-  // }
-  // if(abs(sumY) < DEADZONE){
-  //   sumY = 0;
-  // }
+  if(abs(sumX) < DEADZONE){
+    sumX = 0;
+  }
+  if(abs(sumY) < DEADZONE){
+    sumY = 0;
+  }
+  Serial.print("SUMX: ");
+  Serial.println(sumX);
 }
 
 void calculatePulse(){
   //sum can be between -1023 to 1023
   //pulse must be 1000 - 2000.
    
-  motionPulse = 1500 + (sumY * 500) / 1023;
-  steerPulse = 1500 + (sumX * 500) / 1023;
+  motionPulse = 1500 + ((float)sumY * 500) / 1023.0;
+  steerPulse = 1500 + ((float)sumX * 500) / 1023.0;
   motionPulse = constrain(motionPulse, 1000, 2000);
   steerPulse = constrain(steerPulse, 1000, 2000);
   
@@ -53,7 +55,6 @@ void calculatePulse(){
   
   Serial.print("STEER PULSE: ");
   Serial.println(steerPulse);
-  delay(1000);
 }
 
 void readSensors(){
@@ -68,7 +69,6 @@ void readSensors(){
   Serial.print(r);
   Serial.print("\t");
   Serial.println(l);
-  delay(500);
 }
 
 void setup() {
