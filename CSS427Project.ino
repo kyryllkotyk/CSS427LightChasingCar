@@ -5,7 +5,7 @@
 #define PINL       A2
 #define MOTION_PIN 10
 #define STEER_PIN  11
-const float DEADZONE = 20;
+const float DEADZONE = 10;
 
 
 float f, b, r, l, sumX, sumY;
@@ -45,12 +45,11 @@ void loop(){
   l = analogRead(PINL);
 
   
-  sumX = r - l;  if (abs(sumX) < DEADZONE) sumX = 0;
-  sumX = sumX * -1;
+  sumX = l + 30 - r;  if (abs(sumX) < DEADZONE) sumX = 0;
   sumY = f - b;  if (abs(sumY) < DEADZONE) sumY = 0;
 
   
-  motionPulse = constrain(1550.0 + (sumY * 500.0) / 1023.0, 1525, 1570);
+  motionPulse = constrain(1510 + (sumY * 500.0) / 1023.0, 1520, 1570);
   steerPulse  = constrain(1500 + (sumX * 1200.0) / 1023.0, 1100, 1900);
 
   motionServo.writeMicroseconds(motionPulse);
